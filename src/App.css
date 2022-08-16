@@ -1,7 +1,22 @@
 canvas {
-  border: 1px solid black;
+  /* border: 1px solid black; */
 }
 
 ul {
   list-style-type: none;
+}
+
+span {
+  margin-left: 5px;
+}
+
+
+li {
+  margin-top: 5px;
+  margin-left: 20px;
+}
+
+.nameList {
+font-size: 20px;
+text-decoration: underline;
 }
