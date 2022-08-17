@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import Move from './components/Move';
 
 function App() {
 
@@ -13,7 +14,7 @@ function App() {
 
   const speed = 2 // время перемещения и поворота в секундах
   const ANG = 30 * Math.PI / 180 // угол поворота
-  let x1 = 540
+  let x1 = 540 
   let y1 = 20
 
   function square(ctx, x, y) {
@@ -25,8 +26,7 @@ function App() {
   }
 
 
-
-
+// Перемещение квадрата
 
   function moveTo(x1, y1, speed) {
 
@@ -35,7 +35,7 @@ function App() {
     let dx = (x1 - x) / speed / 60
     let dy = (y1 - y) / speed / 60
 
-    function draw(timestamp) {
+    function draw() {
 
       const end = new Date()
       let diff = end - start
@@ -57,7 +57,7 @@ function App() {
     requestAnimationFrame(draw)
   }
 
-
+// Поворот квадрата 
   function turnTo(speed, angle) {
 
     const start = new Date()
@@ -88,24 +88,32 @@ function App() {
     requestAnimationFrame(turn)
   }
 
-  let boost  = 2*(x1-x)/Math.pow(speed, 2)
+// Ускорение и торможение квадрата по оси X
 
-  function animate({ timing, draw, duration }) {
+  function animate({ timing, draw, duration, flag }) {
+
 
     let start = performance.now()
     const st = new Date()
 
-   
+    let boost  = 2*(x1-x)/Math.pow(speed, 2)
     requestAnimationFrame(function animate(time) {
      
       let timeFraction = (time - start) / duration
       if (timeFraction > 1) timeFraction = 1
+      if (timeFraction < 0) timeFraction = 0
 
       let progress = timing(timeFraction)
 
-    
-      let dx = (boost * Math.pow(, 2))/2
-      x += dx
+    if (flag === 'Ускорение') {
+      let dx = (boost * Math.pow(speed * progress, 2))/2 
+      x = dx + 200
+    }
+   
+      else if (flag === 'Торможение') {
+        let dx = (boost * Math.pow(speed * (1-progress), 2))/2 
+        x = x1 - dx
+      }
       draw(progress, st)
 
       if (timeFraction < 1) {
@@ -115,7 +123,7 @@ function App() {
     });
   }
 
-
+// Функция отрисовки квадрата при торможении, ускорении
   function draw(progress, start) {
     const canvas = document.getElementById('elSquare')
     const ctx = canvas.getContext('2d')
@@ -126,52 +134,10 @@ function App() {
     setArr([...arr, { time: diff, coords: [Math.round(x), Math.round(y)] }])
     square(ctx, x, y)
   }
-
-
+// Функция анимации (линейная)
   function timing(timeFraction) {
     return timeFraction
   }
-
-
-
-  // Анимация торможения
-
-  function animateUp({ timing, draw, duration }) {
-
-    let start = performance.now()
-    const st = new Date()
-
-    requestAnimationFrame(function animate(time) {
-     
-      let timeFraction = (time - start) / duration
-      if (timeFraction > 1) timeFraction = 1
-
-      function makeEaseOut(timing) {
-        return function(timeFraction) {
-          return 1 - timing(1 - timeFraction);
-        }
-      }
-
-      let qqq = makeEaseOut(timing)
-      let progress = qqq(timeFraction)
-
-     console.log(progress);
-      let dx = progress * (x1-x)/speed
-      
-      x += dx
-      draw(progress, st)
-
-      if (timeFraction < 1) {
-        requestAnimationFrame(animate)
-      }
-
-    });
-  }
-
-
-
-
-
 
 
   useEffect(() => {
@@ -189,8 +155,12 @@ function App() {
       </canvas>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <button onClick={() => moveTo(x1, y1, speed)}>Переместить</button>
+        <Move />
         <button onClick={() => turnTo(speed, angle)}>Повернуть</button>
-        <button onClick={() => animate({ timing, draw, duration: speed*1000 })}>Ускорение</button>
+        <button onClick={(e) => animate({ timing, draw, duration: speed*1000, flag: e.target.innerHTML })}>
+          Ускорение</button>
+         <button onClick={(e) => animate({ timing, draw, duration: speed*1000, flag: e.target.innerHTML })}>
+          Торможение</button>
       </div>
 
       <ul>
