@@ -1,22 +1,86 @@
+:root {
+  --primary-blue: #007FFF;
+  --interface-input: #F6F6F9;
+}
+
+
+.title {
+font-size: 20px;
+margin-left: 20px;
+}
+
 canvas {
-  /* border: 1px solid black; */
+  border: 1px solid var(--primary-blue);
+  border-radius: 10px;
+  margin: 10px;
 }
 
 ul {
+  flex: 2;
   list-style-type: none;
-}
-
-span {
-  margin-left: 5px;
+  padding: 0;
+  margin-left: 10px;
 }
 
 
 li {
+  border: 1px solid var(--primary-blue);
+  border-radius: 5px;
   margin-top: 5px;
-  margin-left: 20px;
+  margin-left: 10px;
+  width: 300px;
+  padding: 2px 0px 3px 10px;
 }
 
 .nameList {
 font-size: 20px;
+text-align: center;
+}
+
+
+.data {
+font-size: 18px;
+font-weight: 600;
 text-decoration: underline;
+}
+
+.App {
+display: flex;
+padding-top: 20px;
+}
+
+input {
+  font-family: 'Manrope';
+  font-weight: 700;
+  outline: none;
+  height: 28px;
+  width: 20%;
+  margin-right: 10px;
+  margin-left: 10px;
+  text-align: center;
+  border: none;
+  background: var(--interface-input);
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input:focus {
+  border: 2px solid var(--primary-blue);
+  padding: 0px;
+}
+input:hover {
+  border: 2px solid var(--primary-blue);
+  padding: 0px;
+}
+
+
+
+.formItem {
+width: 280px;
 }
